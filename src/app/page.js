@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import ParkingSpotReservationForm from "@/modules/ParkingSpotReservationForm";
 import { Stage, Layer, Rect, Text } from "react-konva";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 
@@ -68,8 +69,36 @@ const INITIAL_PARKING_SPOTS = [
 ];
 
 const Home = () => {
+  const [parkingSpots, setParkingSpots] = useState(INITIAL_PARKING_SPOTS);
+
   const handleSpotClick = (spotId) => {
-    console.log(spotId);
+    const spot = parkingSpots.find((s) => s.id === spotId);
+    setSelectedSpot(spot);
+  };
+
+  const handleReserveSpot = (reservationData) => {
+    const startTime = new Date();
+    const endTime = new Date(
+      startTime.getTime() + parseInt(reservationData.duration) * 60 * 1000
+    );
+
+    setParkingSpots((currentSpots) =>
+      currentSpots.map((spot) =>
+        spot.id === parseInt(reservationData.spotId)
+          ? {
+              ...spot,
+              isOccupied: true,
+              reservation: {
+                name: reservationData.name,
+                vehicleNumber: reservationData.vehicleNumber,
+                startTime: startTime,
+                endTime: endTime,
+                duration: parseInt(reservationData.duration),
+              },
+            }
+          : spot
+      )
+    );
   };
 
   return (
@@ -139,6 +168,10 @@ const Home = () => {
             </Stage>
           </CardContent>
         </Card>
+        <ParkingSpotReservationForm
+          parkingSpots={parkingSpots}
+          onReserveSpot={handleReserveSpot}
+        />
       </div>
     </div>
   );
