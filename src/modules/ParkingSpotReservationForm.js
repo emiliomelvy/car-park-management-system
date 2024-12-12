@@ -79,52 +79,45 @@ const ParkingSpotReservationForm = ({ parkingSpots, onReserveSpot }) => {
     setIsReservationComplete(true);
   };
 
-  if (isReservationComplete && reservationDetails) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Reservation Confirmed</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-              <h3 className="text-green-800 font-semibold mb-2">
-                Reservation Details:
-              </h3>
-              <div className="space-y-2 text-green-700">
-                <p>Name: {reservationDetails.name}</p>
-                <p>Vehicle Number: {reservationDetails.vehicleNumber}</p>
-                <p>Spot Number: {reservationDetails.spotId}</p>
-                <p>Duration: {reservationDetails.duration} minutes</p>
-                <p>
-                  Start Time: {reservationDetails.startTime.toLocaleString()}
-                </p>
-                <p>End Time: {reservationDetails.endTime.toLocaleString()}</p>
-              </div>
-            </div>
-            <Button
-              onClick={() => {
-                setIsReservationComplete(false);
-                setFormData({
-                  name: "",
-                  vehicleNumber: "",
-                  duration: "",
-                  spotId: "",
-                });
-              }}
-            >
-              Make Another Reservation
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Available durations in minutes
   const availableDurations = [1, 15, 30, 45, 60, 90, 120, 180, 240, 300, 360];
 
-  return (
+  return isReservationComplete && reservationDetails ? (
+    <Card>
+      <CardHeader>
+        <CardTitle>Reservation Confirmed</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+            <h3 className="text-green-800 font-semibold mb-2">
+              Reservation Details:
+            </h3>
+            <div className="space-y-2 text-green-700">
+              <p>Name: {reservationDetails.name}</p>
+              <p>Vehicle Number: {reservationDetails.vehicleNumber}</p>
+              <p>Spot Number: {reservationDetails.spotId}</p>
+              <p>Duration: {reservationDetails.duration} minutes</p>
+              <p>Start Time: {reservationDetails.startTime.toLocaleString()}</p>
+              <p>End Time: {reservationDetails.endTime.toLocaleString()}</p>
+            </div>
+          </div>
+          <Button
+            onClick={() => {
+              setIsReservationComplete(false);
+              setFormData({
+                name: "",
+                vehicleNumber: "",
+                duration: "",
+                spotId: "",
+              });
+            }}
+          >
+            Make Another Reservation
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  ) : (
     <Card>
       <CardHeader>
         <CardTitle>Parking Spot Reservation</CardTitle>
